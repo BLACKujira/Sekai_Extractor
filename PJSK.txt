@@ -1,0 +1,25 @@
+
+get FNAME FILENAME
+get SIZE ASIZE
+log MEMORY_FILE 0 SIZE
+math SIZE - 4
+set TEMP byte 0
+goto 4
+savepos MEMORY
+for i = 1 < 128
+	goto MEMORY
+    if TEMP <= 4
+	    get TEMPB byte
+		goto MEMORY
+		set TEMPBB byte 255
+        math TEMPBB - TEMPB
+        putvarchr MEMORY_FILE MEMORY TEMPBB
+    endif
+	math TEMP + 1
+    if TEMP == 8
+        set TEMP byte 0
+    endif
+	math MEMORY + 1
+next i
+goto 0
+log FNAME 4 SIZE -1

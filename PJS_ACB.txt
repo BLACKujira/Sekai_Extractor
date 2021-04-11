@@ -1,0 +1,29 @@
+set HCA binary \x2E\x68\x63\x61
+set V binary \x5f
+math COUNT = 0
+get BNAME basename 
+string BNAME > 4
+string BNAME + V
+do
+math COUNT + 1
+findloc MEMORYA binary \x48\x43\x41\x00
+math TEMP = MEMORYA
+math TEMP + 4
+goto TEMP
+findloc MEMORYB binary \x48\x43\x41\x00 0 -1
+if MEMORYB == -1
+	get MEMORYB asize
+endif
+findloc MEMORYUTF binary \x40\x55\x54\x46 0 -1
+if MEMORYUTF != -1
+	if MEMORYUTF < MEMORYB
+		math MEMORYB = MEMORYUTF
+	endif
+endif
+math SIZE = MEMORYB
+math SIZE - MEMORYA
+string FNAME = BNAME
+string FNAME + COUNT
+string FNAME + HCA
+log FNAME MEMORYA SIZE
+while MEMORYB != -1
